@@ -134,38 +134,71 @@ export class ChatService {
     const lowerQuery = query.toLowerCase();
     
     if (searchResults.length === 0) {
-      return "I couldn't find specific information about your query in the MPGS documentation. Please try rephrasing your question or ask about topics like payment processing, API integration, webhooks, or security features.";
+      return "I couldn't find specific information about your query. Try asking about payment processing, API integration, webhooks, or security features.";
     }
 
-    // Generate contextual response based on query and results
+    // Generate brief, user-friendly responses
     let response = "";
     
     if (lowerQuery.includes('what is mpgs') || lowerQuery.includes('mpgs overview')) {
-      response = "Mastercard Payment Gateway Services (MPGS) is a comprehensive payment processing solution that enables merchants to accept payments securely online and in-store. Here's what you need to know:\n\n";
-      response += "• **Core Features**: Payment processing APIs, fraud detection, transaction management\n";
-      response += "• **Payment Methods**: Credit cards, digital wallets, alternative payment methods\n";
-      response += "• **Security**: PCI DSS compliant with 3D Secure authentication\n";
-      response += "• **Integration**: Flexible APIs for web, mobile, and in-store payments\n\n";
+      response = "**MPGS (Mastercard Payment Gateway Services)** is a secure payment processing solution for online and in-store transactions.\n\n";
+      response += "**Key Features:**\n";
+      response += "• Payment APIs with fraud detection\n";
+      response += "• Multiple payment methods (cards, wallets)\n";
+      response += "• PCI DSS compliant with 3D Secure\n";
+      response += "• Flexible integration options";
     } else if (lowerQuery.includes('payment processing') || lowerQuery.includes('how to implement')) {
-      response = "To implement payment processing with MPGS, follow these key steps:\n\n";
-      response += "1. **Account Setup**: Configure your MPGS merchant account and obtain API credentials\n";
-      response += "2. **Choose Integration Method**: Hosted checkout, API integration, or mobile SDK\n";
-      response += "3. **Payment Flow**: Implement payment creation, processing, and status handling\n";
-      response += "4. **Security**: Enable 3D Secure and implement proper authentication\n";
-      response += "5. **Testing**: Use sandbox environment for thorough testing\n\n";
+      response = "**Quick Implementation Steps:**\n\n";
+      response += "1. Set up MPGS merchant account & get API keys\n";
+      response += "2. Choose: Hosted checkout or API integration\n";
+      response += "3. Implement payment flow & status handling\n";
+      response += "4. Enable 3D Secure for security\n";
+      response += "5. Test thoroughly in sandbox environment";
     } else if (lowerQuery.includes('api') || lowerQuery.includes('documentation')) {
-      response = "The MPGS API provides comprehensive payment processing capabilities:\n\n";
-      response += "• **Authentication**: API key-based authentication for secure access\n";
-      response += "• **Payment Operations**: Create, capture, refund, and void transactions\n";
-      response += "• **Status Management**: Real-time payment status and transaction details\n";
-      response += "• **Error Handling**: Detailed error codes and response messages\n";
-      response += "• **SDKs Available**: For popular programming languages\n\n";
+      response = "**MPGS API Overview:**\n\n";
+      response += "• **Authentication:** API key-based access\n";
+      response += "• **Operations:** Create, capture, refund payments\n";
+      response += "• **Real-time:** Live status & transaction details\n";
+      response += "• **Support:** SDKs for multiple languages\n";
+      response += "• **Error codes:** Clear response messages";
+    } else if (lowerQuery.includes('webhook')) {
+      response = "**Webhooks:** Real-time payment notifications to your server\n\n";
+      response += "• Configure webhook endpoints in MPGS dashboard\n";
+      response += "• Receive instant updates on payment events\n";
+      response += "• Includes security verification & retry logic";
+    } else if (lowerQuery.includes('security')) {
+      response = "**MPGS Security Features:**\n\n";
+      response += "• **3D Secure:** Enhanced authentication\n";
+      response += "• **PCI DSS:** Compliant infrastructure\n";
+      response += "• **Tokenization:** Secure card data storage\n";
+      response += "• **Fraud tools:** Real-time risk assessment";
+    } else if (lowerQuery.includes('integration') || lowerQuery.includes('steps')) {
+      response = "**Integration Process:**\n\n";
+      response += "1. **Setup:** Get credentials & configure environment\n";
+      response += "2. **Authenticate:** Implement API key authentication\n";
+      response += "3. **Build:** Create payment flow in your app\n";
+      response += "4. **Test:** Use sandbox with test cards\n";
+      response += "5. **Deploy:** Switch to production environment";
+    } else if (lowerQuery.includes('test')) {
+      response = "**Testing MPGS:**\n\n";
+      response += "• Use sandbox environment for safe testing\n";
+      response += "• Test cards available for different scenarios\n";
+      response += "• Webhook testing tools included\n";
+      response += "• Simulate success, failure & fraud cases";
     } else {
-      response = `Based on the MPGS documentation, here's what I found about "${query}":\n\n`;
-      response += searchResults[0].content + "\n\n";
+      // Extract key information from search results
+      const firstResult = searchResults[0];
+      const content = firstResult.content;
+      
+      // Create a brief summary
+      if (content.length > 200) {
+        const sentences = content.split('. ');
+        const summary = sentences.slice(0, 2).join('. ') + (sentences.length > 2 ? '.' : '');
+        response = `**${firstResult.title}**\n\n${summary}`;
+      } else {
+        response = `**${firstResult.title}**\n\n${content}`;
+      }
     }
-    
-    response += "For more detailed information, please refer to the source links below.";
     
     return response;
   }
